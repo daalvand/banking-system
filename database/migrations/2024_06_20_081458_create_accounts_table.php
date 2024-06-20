@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('account_number')->unique();
-            $table->decimal('balance', 15, 2);
             $table->timestamps();
         });
     }
