@@ -30,3 +30,40 @@ if (!function_exists('normalize_amount')) {
     }
 }
 
+
+if (!function_exists('is_valid_card')) {
+    function is_valid_card(int $cardNo): bool
+    {
+        $strCardNo = (string)$cardNo;
+        if (strlen($strCardNo) !== 16) {
+            return false;
+        }
+        $sum = 0;
+        foreach (str_split($strCardNo) as $index => $value) {
+            $value = (int)$value;
+            if ($index % 2 === 0) {
+                $sum += (($value * 2 > 9) ? ($value * 2) - 9 : ($value * 2));
+            } else {
+                $sum += $value;
+            }
+        }
+        return $sum % 10 === 0;
+    }
+}
+
+
+if (!function_exists('card_generator')) {
+    function card_generator(): int
+    {
+        $card = null;
+        if (!$card || $card > 10 ** 16 - 1 || $card < 10 ** 15) {
+            $card = random_int(10 ** 15, 10 ** 16 - 1);
+        }
+        while (true) {
+            if (is_valid_card($card)) {
+                return $card;
+            }
+            $card++;
+        }
+    }
+}
