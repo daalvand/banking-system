@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Account;
+use App\Models\Card;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Account>
  */
-class UserFactory extends Factory
+class TransactionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +19,10 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'  => $this->faker->name,
-            'phone' => $this->faker->unique()->phoneNumber,
+            'source_card_id'      => Card::factory(),
+            'destination_card_id' => Card::factory(),
+            'amount'              => $this->faker->randomFloat(2, 1000, 50000000),
+            'fee'                 => 500,
         ];
     }
 }

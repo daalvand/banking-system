@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<Account>
  */
-class UserFactory extends Factory
+class CardFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,8 +18,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'  => $this->faker->name,
-            'phone' => $this->faker->unique()->phoneNumber,
+            'account_id'  => Account::factory(),
+            'card_number' => $this->faker->unique()->creditCardNumber,
         ];
     }
 }
