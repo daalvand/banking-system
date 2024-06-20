@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\TransactionRepository as TransactionRepositoryContract;
 use App\Contracts\TransactionService as TransactionServiceContract;
+use App\Repositories\TransactionRepository;
 use App\Services\V1\TransactionService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(TransactionServiceContract::class, TransactionService::class);
+        $this->app->bind(TransactionRepositoryContract::class, TransactionRepository::class);
     }
 
     /**

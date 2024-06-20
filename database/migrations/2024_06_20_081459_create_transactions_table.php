@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->foreignId('source_card_id')->constrained('cards')->onDelete('cascade');
             $table->foreignId('destination_card_id')->constrained('cards')->onDelete('cascade');
             $table->decimal('amount', 15, 2);
-            $table->decimal('fee', 15, 2);
             $table->timestamps();
         });
     }

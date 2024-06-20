@@ -22,7 +22,6 @@ class TransactionFactory extends Factory
             'source_card_id'      => Card::factory(),
             'destination_card_id' => Card::factory(),
             'amount'              => $this->faker->randomFloat(2, 1000, 50000000),
-            'fee'                 => 500,
         ];
     }
 }
