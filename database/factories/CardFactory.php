@@ -19,7 +19,8 @@ class CardFactory extends Factory
     {
         return [
             'account_id'  => Account::factory(),
-            'card_number' => $this->faker->unique()->creditCardNumber,
+            'card_number' => card_generator(),
+            'balance'     => $this->faker->numberBetween(100, 1000) * 1000,
         ];
     }
 }
