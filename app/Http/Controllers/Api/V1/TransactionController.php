@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Contracts\TransactionService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\TransactionRequest;
-use App\Models\Card;
+use App\Http\Requests\Api\V1\Transaction\TransferRequest;
+use App\Http\Resources\Api\V1\Transaction\Transfer;
 
 class TransactionController extends Controller
 {
@@ -16,12 +16,12 @@ class TransactionController extends Controller
         $this->transactionService = $transactionService;
     }
 
-    public function transfer(TransactionRequest $request)
+    public function transfer(TransferRequest $request)
     {
         $sourceCard      = $request->validated('source_card');
         $destinationCard = $request->validated('destination_card');
         $result          = $this->transactionService->transfer($sourceCard, $destinationCard, $request->amount);
-        return response()->json($result);
+        return new Transfer($result);
     }
 
     public function topTransactions()

@@ -4,6 +4,8 @@ namespace App\Services\V1;
 
 use App\Contracts\TransactionService as TransactionServiceContract;
 use App\Models\Card;
+use App\Notifications\TransferRecipientNotification;
+use App\Notifications\TransferSenderNotification;
 use App\ValueObjects\TransactionResult;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,6 +13,14 @@ use Illuminate\Validation\ValidationException;
 
 class TransactionService implements TransactionServiceContract
 {
+
+    private float $fee;
+
+    public function __construct()
+    {
+        $this->fee = config('bank.transaction_fee');
+    }
+
     public function transfer(int $sourceCard, int $destinationCard, float $amount): TransactionResult
     {
         return DB::transaction(function () use ($sourceCard, $destinationCard, $amount) {
@@ -20,9 +30,8 @@ class TransactionService implements TransactionServiceContract
             $this->validateSufficientFunds($source, $amount);
             $this->debitSourceCard($source, $amount);
             $this->creditDestinationCard($destination, $amount);
-
-            $transactionFee = config('bank.transaction_fee');
-            $this->logTransaction($source, $destination, $amount, $transactionFee);
+            $this->notify($source, $destination, $amount);
+            $this->logTransaction($source, $destination, $amount);
 
             return new TransactionResult(
                 status: 'success',
@@ -30,19 +39,18 @@ class TransactionService implements TransactionServiceContract
                 amount: $amount,
                 sourceCardNumber: $source->card_number,
                 destinationCardNumber: $destination->card_number,
-                transactionFee: $transactionFee
+                transactionFee: $this->fee
             );
         });
     }
 
     private function validateSufficientFunds(Card $source, float $amount): void
     {
-        $transactionFee = config('bank.transaction_fee');
-        if (($source->balance - $transactionFee) < $amount) {
+        if ($source->balance < $amount + $this->fee) {
             throw ValidationException::withMessages([
                 'source_card' => __('validation.insufficient_funds', [
-                    'required'  => $amount,
-                    'available' => $source->balance - $transactionFee,
+                    'required'  => $amount + $this->fee,
+                    'available' => $source->balance,
                 ])
             ]);
         }
@@ -61,13 +69,30 @@ class TransactionService implements TransactionServiceContract
         $destination->save();
     }
 
-    private function logTransaction(Card $source, Card $destination, float $amount, float $transactionFee): void
+    private function logTransaction(Card $source, Card $destination, float $amount): void
     {
         Log::info('Transfer successful', [
             'source_card'      => $source->card_number,
             'destination_card' => $destination->card_number,
             'amount'           => $amount,
-            'fee'              => $transactionFee,
+            'fee'              => $this->fee,
         ]);
+    }
+
+    private function notify(Card $source, Card $destination, float $amount): void
+    {
+        $source->account->user->notify(new TransferSenderNotification(
+            $source->balance,
+            $amount + $this->fee,
+            $source->card_number,
+            $destination->card_number
+        ));
+        $destination->account->user->notify(new TransferRecipientNotification(
+                $destination->balance,
+                $amount,
+                $source->card_number,
+                $destination->card_number,
+            )
+        );
     }
 }

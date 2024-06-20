@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Api\V1;
+namespace App\Http\Requests\Api\V1\Transaction;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\CardCreditSufficient;
 use App\Rules\CardNumber;
+use Illuminate\Foundation\Http\FormRequest;
 
-class TransactionRequest extends FormRequest
+class TransferRequest extends FormRequest
 {
     public function authorize(): bool
     {
