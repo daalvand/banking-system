@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_id')->constrained()->onDelete('cascade');
-            $table->string('card_number')->unique();
+            $table->unsignedBigInteger('card_number')->unique();
             $table->decimal('balance');
             $table->timestamps();
         });
