@@ -20,7 +20,7 @@ class AccountFactory extends Factory
     {
         return [
             'user_id'        => User::factory(),
-            'account_number' => $this->faker->unique()->bankAccountNumber,
+            'account_number' => $this->faker->unique()->numerify('###############'),
             'balance'        => $this->faker->randomFloat(2, 1000, 1000000),
         ];
     }
