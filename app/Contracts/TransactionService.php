@@ -5,8 +5,9 @@ namespace App\Contracts;
 namespace App\Contracts;
 
 use App\Models\Card;
+use App\ValueObjects\TransactionResult;
 
 interface TransactionService
 {
-    public function transfer(Card $source, Card $destination, float $amount): void;
+    public function transfer(int $sourceCard, int $destinationCard, float $amount): TransactionResult;
 }
