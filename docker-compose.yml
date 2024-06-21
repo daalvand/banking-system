@@ -1,0 +1,25 @@
+services:
+    app:
+        container_name: banking_system_app
+        image: daalvand/banking_system:latest
+        volumes:
+            - .:/var/www/html
+        networks:
+            - banking_system_network
+
+    nginx:
+        container_name: banking_system_nginx
+        image: nginx:1.27-alpine
+        ports:
+            - "${SERVER_PORT:-8000}:80"
+        volumes:
+            - .:/var/www/html
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - banking_system_network
+
+networks:
+    banking_system_network:
+        driver: bridge
