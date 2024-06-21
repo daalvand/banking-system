@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('account_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('card_number')->unique();
-            $table->decimal('balance');
+            $table->decimal('balance', 15, 2);
             $table->timestamps();
         });
     }
