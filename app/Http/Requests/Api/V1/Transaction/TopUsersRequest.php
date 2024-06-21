@@ -15,11 +15,11 @@ class TopUsersRequest extends FormRequest
     {
         $maxUserLimit = config('top-users.max_user_limit');
         $maxTrxLimit  = config('top-users.max_transaction_limit');
-        $maxMin       = config('top-users.max_since_minutes');
+        $maxMinuts    = config('top-users.max_since_minutes');
         return [
             'user_limit'        => ['integer', 'min:1', "max:$maxUserLimit"],
             'transaction_limit' => ['integer', 'min:1', "max:$maxTrxLimit"],
-            'since'             => ['date', "after_or_equal:-$maxMin minutes", 'before_or_equal:now']
+            'since_minutes'     => ['date', "after_or_equal:" . now()->subMinutes($maxMinuts), 'before_or_equal:now']
         ];
     }
 }

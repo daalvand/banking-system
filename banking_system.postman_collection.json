@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "5b4fe169-b9d3-474b-9c66-a08f402d2a35",
+		"name": "banking_system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2980597",
+		"_collection_link": "https://cloudy-astronaut-371870.postman.co/workspace/My-Workspace~e4f07138-02d0-403d-8ea2-617206da25c2/collection/2980597-5b4fe169-b9d3-474b-9c66-a08f402d2a35?action=share&source=collection_link&creator=2980597"
+	},
+	"item": [
+		{
+			"name": "transactions/transfer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"source_card\": \"3924499039997565\",\n    \"destination_card\": \"5144751776745014\",\n    \"amount\": 1000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/transactions/transfer",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"transactions",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transactions/top-users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8000/api/v1/transactions/top-users",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"transactions",
+						"top-users"
+					],
+					"query": [
+						{
+							"key": "user_limit",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "transaction_limit",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "since",
+							"value": "2024-05-21 17:38:00",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
