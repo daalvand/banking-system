@@ -10,8 +10,10 @@ WORKDIR /var/www/html
 RUN apt-get update
 
 RUN apt-get install -y libzip-dev zip
+RUN apt-get install -y default-mysql-client
 
 RUN docker-php-ext-install zip
+RUN docker-php-ext-install pdo_mysql
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN mkdir -p /var/www/.composer
