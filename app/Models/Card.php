@@ -10,6 +10,8 @@ class Card extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['balance'];
+
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class);

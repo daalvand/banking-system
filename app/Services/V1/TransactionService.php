@@ -4,6 +4,7 @@ namespace App\Services\V1;
 
 use App\Contracts\TransactionService as TransactionServiceContract;
 use App\Models\Card;
+use App\Models\Transaction;
 use App\Notifications\TransferRecipientNotification;
 use App\Notifications\TransferSenderNotification;
 use App\ValueObjects\TransactionResult;
@@ -30,6 +31,7 @@ class TransactionService implements TransactionServiceContract
             $this->validateSufficientFunds($source, $amount);
             $this->debitSourceCard($source, $amount);
             $this->creditDestinationCard($destination, $amount);
+            $this->createFeeAndTransaction($source, $destination, $amount);
             $this->notify($source, $destination, $amount);
             $this->logTransaction($source, $destination, $amount);
 
@@ -94,5 +96,16 @@ class TransactionService implements TransactionServiceContract
                 $destination->card_number,
             )
         );
+    }
+
+    private function createFeeAndTransaction(Card $source, Card $destination, float $amount): void
+    {
+        $transaction = Transaction::create([
+            'source_card_id'      => $source->id,
+            'destination_card_id' => $destination->id,
+            'amount'              => $amount,
+        ]);
+
+        $transaction->fees()->create(['amount' => $this->fee]);
     }
 }

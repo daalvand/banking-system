@@ -21,24 +21,25 @@ class TransferRequest extends FormRequest
 
     public function rules(): array
     {
-        $amount = $this->post('amount');
-
+        $amount = (int)$this->input('amount');
         return [
             'source_card'      => [
                 'required',
                 'digits:16',
+                'different:destination_card',
                 new CardNumber,
                 new CardCreditSufficient($amount),
             ],
             'destination_card' => [
                 'required',
                 'digits:16',
+                'different:source_card',
                 new CardNumber,
                 'exists:cards,card_number'
             ],
             'amount'           => [
                 'required',
-                'numeric',
+                'int',
                 'min:' . config('bank.min_amount'),
                 'max:' . config('bank.max_amount')
             ],

@@ -191,6 +191,8 @@ return [
     |
     */
 
-    'attributes' => [],
-
+    'attributes' => [
+        'source_card'      => 'source_card',
+        'destination_card' => 'destination_card',
+    ],
 ];

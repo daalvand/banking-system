@@ -12,30 +12,26 @@ if (!function_exists('convert_to_english_numbers')) {
 }
 
 if (!function_exists('normalize_card')) {
-    function normalize_card(string|int $card): int
+    function normalize_card(string|int $card): string
     {
-        $normalized = convert_to_english_numbers($card);
-        $normalized = preg_replace('/\D/', '', $normalized);
-        return (int)$normalized;
+        return convert_to_english_numbers($card);
     }
 }
 
 if (!function_exists('normalize_amount')) {
 
-    function normalize_amount(string|float $amount): float
+    function normalize_amount(string|float|int $amount): string
     {
-        $amount = convert_to_english_numbers($amount);
-        $amount = preg_replace('/[^\d.,]/', '', $amount);
-        return (float)$amount;
+        return convert_to_english_numbers($amount);
     }
 }
 
 
 if (!function_exists('is_valid_card')) {
-    function is_valid_card(int $cardNo): bool
+    function is_valid_card(int|string $cardNo): bool
     {
         $strCardNo = (string)$cardNo;
-        if (strlen($strCardNo) !== 16) {
+        if (strlen($strCardNo) !== 16 || !ctype_digit($strCardNo)) {
             return false;
         }
         $sum = 0;

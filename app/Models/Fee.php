@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Fee extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['amount'];
 }

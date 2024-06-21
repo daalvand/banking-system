@@ -9,8 +9,8 @@ class CardNumber implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!is_valid_card($value)) {
-            $fail(__('validation.invalid_card_number', $attribute));
+        if (!is_scalar($value) || !is_valid_card($value)) {
+            $fail(__('validation.invalid_card_number', ['attribute' => $attribute]));
         }
     }
 }

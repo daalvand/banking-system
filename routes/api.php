@@ -10,6 +10,6 @@ Route::prefix('v1')->group(function () {
         ->controller(TransactionController::class)
         ->group(function () {
             Route::get('top', 'topTransactions');
-            Route::post('', 'transfer');
+            Route::post('transfer', 'transfer');
         });
 });
