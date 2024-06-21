@@ -94,6 +94,7 @@ class KavenegarClientTest extends TestCase
             $this->assertEquals($expectedUrl, $request->url());
             $this->assertEquals($expectedData, $request->data());
             $this->assertEquals('POST', $request->method());
+            $this->assertTrue($request->isForm());
 
             return true;
         });

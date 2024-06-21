@@ -25,7 +25,7 @@ class KavenegarClient implements KavenegarClientContract
         $params = $request->toArray();
         $url    = $this->getUrl('sms/send.json');
         try {
-            $response = Http::timeout($this->timeout)->asJson()->acceptJson()->post($url, $params);
+            $response = Http::timeout($this->timeout)->asForm()->post($url, $params);
             if (!$response->successful()) {
                 throw new KavenegarException($response->body(), $response->status(), $response->toException());
             }
