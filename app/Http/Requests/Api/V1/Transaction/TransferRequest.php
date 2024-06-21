@@ -13,12 +13,6 @@ class TransferRequest extends FormRequest
         return true;
     }
 
-    public function validationData(): array
-    {
-        // Making sure that inputs will be sent in the body
-        return $this->post();
-    }
-
     public function rules(): array
     {
         $amount = (int)$this->input('amount');

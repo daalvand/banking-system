@@ -41,17 +41,62 @@ class TransferTest extends TestCase
         $amount      = 1000;
         $response    = $this->makeTransferRequest($source, $destination, $amount);
 
-        $response->assertOk()->assertJson([
-            "data" => [
-                "status"                  => "success",
-                "message"                 => "Transfer successful",
-                "amount"                  => $amount,
-                "source_card_number"      => $source,
-                "destination_card_number" => $destination,
-                "transaction_fee"         => $this->fee,
-            ]
-        ]);
+        $this->assertOkResponse($response, $amount, $source, $destination);
 
+        $this->assertSourceCardBalanceUpdated($amount);
+        $this->assertDestinationCardBalanceUpdated($amount);
+        $this->assertTransactionCreated($amount);
+        $this->assertFeeCreated();
+        $this->assertNotificationsSent();
+    }
+
+    #[Test]
+    public function it_should_transfer_funds_successfully_with_persian_numbers()
+    {
+        Notification::fake();
+
+        $source      = $this->sourceCard->card_number;
+        $destination = $this->destinationCard->card_number;
+        $amount      = 1000;
+
+        $persianSource      = convert_to_persian_numbers($source);
+        $persianDestination = convert_to_persian_numbers($destination);
+        $persianAmount      = convert_to_persian_numbers($amount);
+
+        $this->assertTrue(is_persian_number($persianSource));
+        $this->assertTrue(is_persian_number($persianDestination));
+        $this->assertTrue(is_persian_number($persianAmount));
+
+        $response = $this->makeTransferRequest($persianSource, $persianDestination, $persianAmount);
+
+        $this->assertOkResponse($response, $amount, $source, $destination);
+        $this->assertSourceCardBalanceUpdated($amount);
+        $this->assertDestinationCardBalanceUpdated($amount);
+        $this->assertTransactionCreated($amount);
+        $this->assertFeeCreated();
+        $this->assertNotificationsSent();
+    }
+
+    #[Test]
+    public function it_should_transfer_funds_successfully_with_arabic_numbers()
+    {
+        Notification::fake();
+
+        $source      = $this->sourceCard->card_number;
+        $destination = $this->destinationCard->card_number;
+        $amount      = 1000;
+
+        $arabicSource      = convert_to_arabic_numbers($source);
+        $arabicDestination = convert_to_arabic_numbers($destination);
+        $arabicAmount      = convert_to_arabic_numbers($amount);
+
+        $this->assertTrue(is_arabic_number($arabicSource));
+        $this->assertTrue(is_arabic_number($arabicDestination));
+        $this->assertTrue(is_arabic_number($arabicAmount));
+
+        $response = $this->makeTransferRequest($arabicSource, $arabicDestination, $arabicAmount);
+
+        $this->assertOkResponse($response, $amount, $source, $destination);
         $this->assertSourceCardBalanceUpdated($amount);
         $this->assertDestinationCardBalanceUpdated($amount);
         $this->assertTransactionCreated($amount);
@@ -229,6 +274,20 @@ class TransferTest extends TestCase
         $this->assertDatabaseHas('fees', [
             'amount'         => $this->fee,
             'transaction_id' => Transaction::first()->id,
+        ]);
+    }
+
+    private function assertOkResponse(TestResponse $response, int $amount, mixed $source, mixed $destination): void
+    {
+        $response->assertOk()->assertJson([
+            "data" => [
+                "status"                  => "success",
+                "message"                 => "Transfer successful",
+                "amount"                  => $amount,
+                "source_card_number"      => $source,
+                "destination_card_number" => $destination,
+                "transaction_fee"         => $this->fee,
+            ]
         ]);
     }
 }

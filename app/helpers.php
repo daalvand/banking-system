@@ -63,3 +63,32 @@ if (!function_exists('card_generator')) {
         }
     }
 }
+
+if (!function_exists('convert_to_persian_numbers')) {
+    function convert_to_persian_numbers($number): string
+    {
+        return strtr((string)$number, ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"]);
+    }
+}
+
+if (!function_exists('convert_to_arabic_numbers')) {
+    function convert_to_arabic_numbers($number): string
+    {
+        return strtr((string)$number, ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"]);
+    }
+}
+
+if (!function_exists('is_persian_number')) {
+    function is_persian_number($number): bool
+    {
+        return preg_match('/[۰-۹]/u', $number) === 1;
+    }
+}
+
+if (!function_exists('is_arabic_number')) {
+    function is_arabic_number($number): bool
+    {
+        return preg_match('/[٠-٩]/u', $number) === 1;
+    }
+}
+
