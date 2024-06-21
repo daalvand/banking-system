@@ -25,7 +25,7 @@ class TransferNotificationsTest extends TestCase
     #[Test]
     public function it_constructs_transfer_recipient_notification_correctly()
     {
-        $notifiable            = User::factory()->create();
+        $notifiable            = User::factory()->make();
         $newBalance            = 5000;
         $amount                = 2500;
         $sourceCardNumber      = card_generator();
@@ -52,7 +52,7 @@ class TransferNotificationsTest extends TestCase
     #[Test]
     public function it_constructs_transfer_sender_notification_correctly()
     {
-        $notifiable            = User::factory()->create();
+        $notifiable            = User::factory()->make();
         $remainingBalance      = 3000;
         $amount                = 1500;
         $sourceCardNumber      = card_generator();

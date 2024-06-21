@@ -7,18 +7,19 @@ use App\Contracts\SmsService;
 use App\Models\User;
 use App\Notifications\TransferSenderNotification;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class SmsChannelTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_send_sms_notification()
     {
         /** @var SmsService&MockInterface $smsService */
         $smsService = $this->mock(SmsService::class);
         $smsChannel = new SmsChannel($smsService);
 
-        $notifiable   = User::factory()->create();
+        $notifiable   = User::factory()->make();
         $notification = $this->getNotification();
 
         $smsService->shouldReceive('send')
