@@ -9,7 +9,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('transactions')
         ->controller(TransactionController::class)
         ->group(function () {
-            Route::get('top', 'topTransactions');
+            Route::get('top-users', 'topUsers');
             Route::post('transfer', 'transfer');
         });
 });

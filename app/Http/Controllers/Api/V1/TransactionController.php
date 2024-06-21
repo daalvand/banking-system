@@ -19,11 +19,11 @@ class TransactionController extends Controller
         return new Transfer($result);
     }
 
-    public function topTransactions(TopUsersRequest $request, TransactionRepository $transactionRepository)
+    public function topUsers(TopUsersRequest $request, TransactionRepository $transactionRepository)
     {
-        $userLimit        = $request->validated('user_limit', 3);
-        $transactionLimit = $request->validated('transaction_limit', 10);
-        $since            = $request->validated('since', now()->subMinutes(10));
+        $userLimit        = $request->validated('user_limit', config('top-users.max_user_limit'));
+        $transactionLimit = $request->validated('transaction_limit', config('top-users.max_transaction_limit'));
+        $since            = $request->validated('since', now()->subMinutes(config('top-users.max_since_minutes')));
         $topUsers         = $transactionRepository->getTopUsersWithTransactions($userLimit, $transactionLimit, $since);
         return response()->json(['data' => $topUsers]);
     }
